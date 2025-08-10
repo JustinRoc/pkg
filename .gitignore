@@ -1,0 +1,2 @@
+# 忽略根目录的main.go文件
+/main.go
