@@ -6,7 +6,7 @@
 
 ### slogw - 增强的日志记录器
 
-基于Go标准库`log/slog`的增强日志记录器，提供以下特性：
+基于Go标准库 `log/slog`的增强日志记录器，提供以下特性：
 
 - **JSON格式输出**：结构化日志输出
 - **文件轮转**：支持日志文件自动轮转和压缩
@@ -38,11 +38,11 @@ func main() {
         "service": "my-service",
         "version": "1.0.0",
     })
-    
+  
     // 基本日志记录
     slogw.Info("应用启动", "port", 8080)
     slogw.Error("发生错误", "error", "connection failed")
-    
+  
     // 带上下文的日志记录
     ctx := context.WithValue(context.Background(), slogw.XRequestID, "req-123")
     slogw.InfoContext(ctx, "处理请求", "user_id", 1001)
@@ -57,7 +57,7 @@ func main() {
 
 ## 依赖
 
-- Go 1.22.5+
+- Go 1.24+
 - gopkg.in/natefinch/lumberjack.v2
 
 ## License
