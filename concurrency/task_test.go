@@ -34,16 +34,16 @@ func TestConTask(t *testing.T) {
 			return fileContent, nil
 		},
 	}
-	resultPtrs, err := ConTasks(ctx, tasks, 2)
+	results, err := ConTasks(ctx, tasks, 2)
 	if err != nil {
 		fmt.Println("ERR", err)
 	}
-	for i, rstPtr := range resultPtrs {
-		if *rstPtr == nil { // 这里的判断逻辑需要依据Task函数返回值的类型来判断，如果返回值是结构体，那这里就不能这么搞了
+	for i, rst := range results {
+		if rst == nil { // 这里的判断逻辑需要依据Task函数返回值的类型来判断，如果返回值是结构体，那这里就不能这么搞了
 			fmt.Printf("rst %d is nil\n", i)
 			continue
 		}
-		fmt.Printf("file%d content: %s\n", i, string((*rstPtr).data))
+		fmt.Printf("file%d content: %s\n", i, string(rst.data))
 	}
 }
 
