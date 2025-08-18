@@ -2,31 +2,31 @@ package concurrency
 
 import (
 	"context"
+	"sync"
 
 	"golang.org/x/sync/errgroup"
 )
 
 type Task[T any] func(ctx context.Context) (T, error)
 
-func ConTasks[T any](ctx context.Context, tasks []Task[T], concurrency int) ([]*T, error) {
+func ConTasks[T any](ctx context.Context, tasks []Task[T], concurrency int) ([]T, error) {
 	n := len(tasks)
-	resultPtrs := make([]*T, n)
-	for i := 0; i < n; i++ {
-		resultPtrs[i] = new(T)
-	}
+	var mu sync.Mutex 
+	results := make([]T, n)
 	g, ctx := errgroup.WithContext(ctx)
 	g.SetLimit(concurrency)
 	for i, t := range tasks {
-		idx, task := i, t // 确保协程参数是正确的
-		rstPtr := resultPtrs[idx]
+		idx, task := i, t
 		g.Go(func() error {
 			rst, err := task(ctx)
 			if err != nil {
 				return err
 			}
-			*rstPtr = rst
+			mu.Lock()
+			results[idx] = rst
+			mu.Unlock()
 			return nil
 		})
 	}
-	return resultPtrs, g.Wait()
+	return results, g.Wait()
 }
